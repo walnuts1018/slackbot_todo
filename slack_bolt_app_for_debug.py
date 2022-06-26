@@ -6,7 +6,7 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import uuid
 import re
-
+import datetime
 #load_dotenv()
 #app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
@@ -62,8 +62,14 @@ def main():
       elif len(userInput)==2:
         if (pattern_n.search(userInput[1]) == None):
           if (pattern_abc.search(userInput[1])== None):
-            tasks[id] = [userInput[0],userInput[1]]
-
+            if (len(userInput[1])==8):
+              dt = datetime.datetime(int(str(userInput[1])[0:4]),int(str(userInput[1])[4:6]),int(str(userInput[1])[6:8]))
+              tasks[id] = [userInput[0],dt]
+            elif(len(userInput[1])<8):
+              print("日付の形式に誤りがあります。")
+            else :
+              dt = datetime.datetime(int(str(userInput[1])[0:4]),int(str(userInput[1])[4:6]),int(str(userInput[1])[6:8]),int(str(userInput[1])[8:10]),int(str(userInput[1])[10:12]))
+              tasks[id] = [userInput[0],dt]
           else: 
             print('文法エラーです(Make sure it does not contain [a-z].)')
         else:
