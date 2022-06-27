@@ -26,7 +26,7 @@ pattern_abc = re.compile(r'[a-z]')
 
 
 @app.command("/task")
-def todo(ack, respond, command):
+def todo(ack, respond, command, say):
     ack()
     userInput = command['text'].split()
     userid = str(command['user_id'])
@@ -91,6 +91,30 @@ def todo(ack, respond, command):
                 respond(str(tasks_value[0])+"の削除に成功しました。")
     elif(userInput[0] == "help"):
         respond("Hi there :wave: このアプリはwalnuts製のToDo管理アプリです！ \n \n 適当に作ったアプリなのでプライバシー的に問題がある可能性があります。知られちゃ困ることは登録しないでね～ \n \n  コマンドの使い方 \n --------------------------------------------------------------------------------------- \n タスクを追加する `/task 名前` \n \n 期限付きのタスクを追加する (hhmmは省略すると00:00になります) `/task 名前 yyyymmddhhmm` \n 例(test, 2003/10/18 10:45): `/task test 200310181045` \n \n 任意の整数nを用いて定期的なタスクを登録できます。y:年、m:月、d:日を用いて繰り返しを定義できます。この場合、時刻を省略することはできません。+のところスペースは入れないでね～ `/task 名前 yyyymmddhhmm+[任意の数字]n[y,m,d]` \n  例(お誕生日 2003/10/18/00:00から毎年繰り返し): `/task walnutsお誕生日 200310180000+1ny` \n \n タスクを一覧表示します。 `/task` \n \nタスクを消します。 `/task` で表示したときの番号で指定します。タスクを追加したり消したりするとこの番号は変わるので注意してください。 `/task fin [タスクの番号]` \n \n 同じくタスクを消しますが、こちらを用いると繰り返しタスクをすべて消すことができます。 `/task del [タスクの番号]` \n \n このヘルプを表示します。 `/task help` \n ---------------------------------------------------------------------------------------")
+
+
+    #elif(userInput[0]=="change"):
+        #if len(userInput)<4:
+        #    print("Error:変更したいタスクの番号, 削除後の内容を入力してください")
+        #else:
+        #    tasklist_tmp=users[userid][0][id_to_uuid[int(userInput[1])]]
+
+    elif(userInput[0]=="show"):
+        num = 1
+        prt_txt = ""
+        for i in users[userid][0].values():
+            prt_txt = prt_txt+"\n"+str(num)+" : "+str(i[0])+" "+str(i[1])
+            num += 1
+        if (len(users[userid][1]) != 0):
+            prt_txt = prt_txt+"\n"+"期限日が設定されていないタスク"
+            for i in users[userid][1].values():
+                prt_txt = prt_txt+"\n"+str(num)+" : "+str(i[0])
+                num += 1
+        if (prt_txt == ""):
+            prt_txt = "タスクはありません"
+        say(prt_txt)
+
+
     else:
         id = str(uuid.uuid1())
         if len(userInput) == 1:
