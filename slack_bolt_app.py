@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 import os
 from dotenv import load_dotenv
 import pickle
