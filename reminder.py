@@ -73,5 +73,6 @@ def reminder_send():
     return True
 
 open_pickle()
-schedule.every(interval_time).seconds.do(reminder_send)
-schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
+while True:
+    schedule.every(interval_time).seconds.do(reminder_send)
+    schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
