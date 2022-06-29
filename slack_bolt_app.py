@@ -24,7 +24,6 @@ else:
 pattern_n = re.compile(r'n')
 pattern_abc = re.compile(r'[a-z]')
 
-
 @app.command("/task")
 def todo(ack, respond, command, say):
     ack()
