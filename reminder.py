@@ -4,6 +4,7 @@ import requests
 import pickle
 import datetime
 import schedule
+import time
 
 load_dotenv()
 TOKEN = str(os.environ.get("SLACK_BOT_TOKEN"))
@@ -19,7 +20,6 @@ userid='U03BH0RKCR0'
 
 
 def open_pickle():
-    global users
     is_file = os.path.isfile('users_tasks.pkl')
     if is_file:
         with open('users_tasks.pkl', 'rb') as f:
@@ -28,8 +28,6 @@ def open_pickle():
         print("there are no users files.")
 
 def post_message(post_text):
-    global url
-    global headers
     data = {
         'channel': "walnuts-memo",
         'text': post_text
@@ -40,7 +38,6 @@ def post_message(post_text):
 
 
 def send_all_task_text():
-    global users
     open_pickle()
     num = 1
     prt_txt = ""
@@ -57,7 +54,6 @@ def send_all_task_text():
     post_message(prt_txt)
 
 def reminder_id():
-    global users
     return_id=[]
     for i, j in users[userid][0].items():
         if (remind_time-interval_time-30 < (j[1]-datetime.datetime.now()).seconds < remind_time):
@@ -65,7 +61,6 @@ def reminder_id():
     return return_id
 
 def reminder_send():
-    global users
     open_pickle()
     post_ids=reminder_id()
     for i in post_ids:
@@ -73,6 +68,10 @@ def reminder_send():
     return True
 
 open_pickle()
+
+schedule.every(interval_time).seconds.do(reminder_send)
+schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
+
 while True:
-    schedule.every(interval_time).seconds.do(reminder_send)
-    schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
+    schedule.run_pending()
+    time.sleep(10)
