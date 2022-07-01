@@ -57,8 +57,7 @@ def send_all_task_text():
 def reminder_id():
     return_id=[]
     for i, j in users[userid][0].items():
-        print(j,(j[1]-datetime.datetime.now()).seconds)
-        if (remind_time-interval_time-30 < (j[1]-datetime.datetime.now()).seconds < remind_time):
+        if (remind_time-interval_time-30 < (j[1]-datetime.datetime.now()).total_seconds() < remind_time):
             return_id.append(i)
     return return_id
 
