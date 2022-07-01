@@ -20,6 +20,7 @@ userid='U03BH0RKCR0'
 
 
 def open_pickle():
+    global users
     is_file = os.path.isfile('users_tasks.pkl')
     if is_file:
         with open('users_tasks.pkl', 'rb') as f:
@@ -56,6 +57,7 @@ def send_all_task_text():
 def reminder_id():
     return_id=[]
     for i, j in users[userid][0].items():
+        print(j,(j[1]-datetime.datetime.now()).seconds)
         if (remind_time-interval_time-30 < (j[1]-datetime.datetime.now()).seconds < remind_time):
             return_id.append(i)
     return return_id
@@ -68,10 +70,10 @@ def reminder_send():
     return True
 
 open_pickle()
-
-schedule.every(interval_time).seconds.do(reminder_send)
+reminder_id()
 schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
 
 while True:
     schedule.run_pending()
-    time.sleep(10)
+    reminder_send()
+    time.sleep(interval_time)

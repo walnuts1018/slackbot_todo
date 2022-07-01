@@ -113,7 +113,6 @@ def todo(ack, respond, command, say):
             prt_txt = "タスクはありません"
         say(prt_txt)
 
-
     else:
         id = str(uuid.uuid1())
         if len(userInput) == 1:
