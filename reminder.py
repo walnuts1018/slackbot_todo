@@ -5,6 +5,7 @@ import pickle
 import datetime
 import schedule
 import time
+import slack_bolt_app
 
 load_dotenv()
 TOKEN = str(os.environ.get("SLACK_BOT_TOKEN"))
@@ -57,7 +58,7 @@ def send_all_task_text():
 def reminder_id():
     return_id=[]
     for i, j in users[userid][0].items():
-        if (remind_time-interval_time-30 < (j[1]-datetime.datetime.now()).total_seconds() < remind_time):
+        if (remind_time-interval_time < (j[1]-datetime.datetime.now()).total_seconds() < remind_time):
             return_id.append(i)
     return return_id
 
@@ -75,4 +76,5 @@ schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
 while True:
     schedule.run_pending()
     reminder_send()
+    slack_bolt_app.time_cal()
     time.sleep(interval_time)
