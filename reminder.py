@@ -40,9 +40,6 @@ def post_message(post_text):
 
 
 def send_all_task_text():
-    open_pickle()
-    for i in users[userid][2].keys():
-        n_regist(i,userid)
     num = 1
     prt_txt = ""
     for i in users[userid][0].values():
@@ -105,11 +102,12 @@ def time_cal(given_datetime, given_n,):
 
     return num_caldate, return_datetime
 
-open_pickle()
-reminder_id()
 schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
 
 while True:
+    open_pickle()
+    for i in users[userid][2].keys():
+        n_regist(i,userid)
     schedule.run_pending()
     reminder_send()
     time.sleep(interval_time)
