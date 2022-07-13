@@ -15,7 +15,7 @@ users={}
 
 # seconds
 remind_time = 1*3600
-interval_time = 60
+interval_time = 59
 Regular_reminder_time="07:00"
 userid='U03BH0RKCR0'
 
@@ -111,3 +111,4 @@ while True:
     schedule.run_pending()
     reminder_send()
     time.sleep(interval_time)
+
