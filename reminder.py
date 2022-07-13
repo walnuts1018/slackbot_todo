@@ -5,7 +5,6 @@ import pickle
 import datetime
 import schedule
 import time
-import slack_bolt_app
 
 load_dotenv()
 TOKEN = str(os.environ.get("SLACK_BOT_TOKEN"))
@@ -41,6 +40,8 @@ def post_message(post_text):
 
 def send_all_task_text():
     open_pickle()
+    for i in users[userid][2].keys():
+        n_regist(i,userid)
     num = 1
     prt_txt = ""
     for i in users[userid][0].values():
@@ -69,6 +70,14 @@ def reminder_send():
         post_message(users[userid][0][i][0]+"の締め切りは"+str(int(remind_time/60))+"分後です!")
     return True
 
+def n_regist(given_uuid,userid):
+    tasks_sc_tmp = users[userid][2][given_uuid]
+    users[userid][2][given_uuid] = [tasks_sc_tmp[0], tasks_sc_tmp[1],
+                                    tasks_sc_tmp[2], time_cal(tasks_sc_tmp[1], tasks_sc_tmp[2])[0]]
+    users[userid][0][given_uuid] = [tasks_sc_tmp[0],
+                                    time_cal(tasks_sc_tmp[1], tasks_sc_tmp[2])[1]]
+    return True
+
 open_pickle()
 reminder_id()
 schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
@@ -76,5 +85,4 @@ schedule.every().day.at(Regular_reminder_time).do(send_all_task_text)
 while True:
     schedule.run_pending()
     reminder_send()
-    slack_bolt_app.time_cal()
     time.sleep(interval_time)
