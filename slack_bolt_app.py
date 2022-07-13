@@ -26,6 +26,11 @@ pattern_abc = re.compile(r'[a-z]')
 
 @app.command("/task")
 def todo(ack, respond, command, say):
+    if is_file:
+        with open('users_tasks.pkl', 'rb') as f:
+            users = pickle.load(f)
+    else:
+        print("users_task.pkl error")
     ack()
     userInput = command['text'].split()
     userid = str(command['user_id'])
