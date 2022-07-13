@@ -5,6 +5,7 @@ import pickle
 import datetime
 import schedule
 import time
+from dateutil.relativedelta import relativedelta
 
 load_dotenv()
 TOKEN = str(os.environ.get("SLACK_BOT_TOKEN"))
@@ -77,6 +78,32 @@ def n_regist(given_uuid,userid):
     users[userid][0][given_uuid] = [tasks_sc_tmp[0],
                                     time_cal(tasks_sc_tmp[1], tasks_sc_tmp[2])[1]]
     return True
+
+def time_cal(given_datetime, given_n,):
+    num_caldate = 0
+    return_datetime = ""
+    if (str(given_n)[-1] == "y"):
+        return_datetime = given_datetime
+        while (return_datetime < datetime.datetime.now()):
+            return_datetime = given_datetime + \
+                relativedelta(years=num_caldate*int(str(given_n)[0:-2]))
+            num_caldate += 1
+
+    if (str(given_n)[-1] == "m"):
+        return_datetime = given_datetime
+        while (return_datetime < datetime.datetime.now()):
+            return_datetime = given_datetime + \
+                relativedelta(months=num_caldate*int(str(given_n)[0:-2]))
+            num_caldate += 1
+
+    if (str(given_n)[-1] == "d"):
+        return_datetime = given_datetime
+        while (return_datetime < datetime.datetime.now()):
+            return_datetime = given_datetime + \
+                relativedelta(days=num_caldate*int(str(given_n)[0:-2]))
+            num_caldate += 1
+
+    return num_caldate, return_datetime
 
 open_pickle()
 reminder_id()
