@@ -15,6 +15,7 @@ users={}
 
 # seconds
 remind_time = 1*3600
+remind_check_time=1*300
 interval_time = 59
 Regular_reminder_time="07:00"
 userid='U03BH0RKCR0'
@@ -61,11 +62,28 @@ def reminder_id():
             return_id.append(i)
     return return_id
 
+def reminder_check_send():
+    open_pickle()
+    post_ids=reminder_check_id()
+    i=""
+    for i in post_ids:
+        post_message(users[userid][0][i][0]+"の締め切り"+str(int(remind_time/60))+"分前ですよ！ちゃんと提出できましたか？")
+    if(i!=""):
+        post_message("https://panda.ecs.kyoto-u.ac.jp/portal/")
+    return True
+
+def reminder_check_id():
+    return_id=[]
+    for i, j in users[userid][0].items():
+        if (remind_check_time-interval_time < (j[1]-datetime.datetime.now()).total_seconds() < remind_check_time):
+            return_id.append(i)
+    return return_id
+
 def reminder_send():
     open_pickle()
     post_ids=reminder_id()
     for i in post_ids:
-        post_message(users[userid][0][i][0]+"の締め切りは"+str(int(remind_time/60))+"分後です!")
+        post_message(users[userid][0][i][0]+"の締め切りは"+str(int(remind_time/60))+"分後です!わすれないでね！")
     return True
 
 def n_regist(given_uuid,userid):
@@ -110,5 +128,6 @@ while True:
         n_regist(i,userid)
     schedule.run_pending()
     reminder_send()
+    reminder_check_send()
     time.sleep(interval_time)
 
