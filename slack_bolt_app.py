@@ -24,6 +24,10 @@ else:
 pattern_n = re.compile(r'n')
 pattern_abc = re.compile(r'[a-z]')
 
+@app.event("message")
+def handle_message_events(body, logger):
+    pass
+
 @app.command("/task")
 def todo(ack, respond, command, say):
     ack()
